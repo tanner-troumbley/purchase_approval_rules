@@ -1,0 +1,22 @@
+<odoo>
+    <data noupdate='1'>
+        <record id='equal_condition' model='purchase_approval_rules.field_conditions.conditions'>
+            <field name='name'>is Equal To</field>
+            <field name='string_condition'>True</field>
+        </record>
+        <record id='greater_then_condition' model='purchase_approval_rules.field_conditions.conditions'>
+            <field name='name'>is Greater Then</field>
+        </record>
+          <record id='less_then_condition' model='purchase_approval_rules.field_conditions.conditions'>
+            <field name='name'>is Less Then</field>
+        </record>
+        <record id='contains_condition' model='purchase_approval_rules.field_conditions.conditions'>
+            <field name='name'>Contains</field>
+            <field name='string_condition'>True</field>
+        </record>
+         <record id='is_condition' model='purchase_approval_rules.field_conditions.conditions'>
+            <field name='name'>is</field>
+            <field name='boolean_condition'>True</field>
+        </record>
+    </data>
+</odoo>

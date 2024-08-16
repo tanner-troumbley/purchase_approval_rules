@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+          <record id="purchase_order_approval_customization" model="ir.ui.view">
+            <field name="name">purchase.order.approval.customization</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_approve']" position="attributes">
+                    <attribute name="groups"/>
+                </xpath>
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name='purchase_order_type'/>
+                </xpath>
+            </field>
+      </record>
+    </data>
+</odoo>

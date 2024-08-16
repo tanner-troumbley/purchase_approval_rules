@@ -1,0 +1,69 @@
+<odoo>
+    <data>
+        <record id='group_rule' model='purchase_approval_rules'>
+            <field name='name'>Group Approvals</field>
+            <field name='state'>group_amounts</field>
+            <field name="group_amount_ids" model="purchase_approval_rules.group_amounts" eval="[(5, 0, 0),
+                (0, 0, {
+                    'group_id': ref('base.group_erp_manager'),
+                    'amount': 10000}),
+                (0, 0, {
+                    'group_id': ref('purchase.group_purchase_manager'),
+                    'amount': 2000})
+            ]"/>
+        </record>
+    
+        <record id='budget_rule' model='purchase_approval_rules'>
+            <field name='name'>Budget approval</field>
+            <field name='state'>code</field>
+            <field name='code'>def _check_budget(self):
+    """Checks for a material budget for the analytic account and if it has gone over by 5% or more."""
+    lines_list = list(self.order_line)
+    projects_over_budget = []
+    msg = ''
+    i=0
+    for line in lines_list:
+        total_price = line.price_subtotal
+        i += 1
+        for j in range(i, len(lines_list)):
+            if line.account_analytic_id == lines_list[j].account_analytic_id:
+                total_price += lines_list[j].price_subtotal
+
+
+        budget_positions = self.env['account.budget.post'].search([('name', '=', 'Materials')]).ids
+
+        if not budget_positions:
+            msg += "There is no Material Budget Position in the system.\n"
+
+        material_budget = self.env['crossovered.budget.lines'].search([('id', 'in', line.account_analytic_id.crossovered_budget_line.ids), ('general_budget_id', 'in', budget_positions), ('crossovered_budget_state', 'in', ('confirm', 'validate'))])
+        if not material_budget:
+          msg += 'There is no Material Budget for %s\n\n' % line.account_analytic_id.name
+          continue
+
+        if len(material_budget) > 1:
+          msg += 'There are multiple Material Budgets for %s\n\n' % line.account_analytic_id.name
+          continue
+        
+        if material_budget.planned_amount == 0:
+          projects_over_budget.append(line.account_analytic_id.name)
+          
+        if material_budget.planned_amount != 0:
+          percentage = (material_budget.actual_amount - total_price) / material_budget.planned_amount 
+        
+          if percentage >= 1.05 or percentage &lt;= -1.05:
+            projects_over_budget.append(line.account_analytic_id.name)        
+
+    if projects_over_budget:
+      compiled_list= set(projects_over_budget)
+      projects = '\n'.join(map(str, compiled_list))
+      msg += 'This order cannot be approved or processed. The following Analytic Accounts have almost exceeded their allocated budget.  Please contact the Project Manager and a member of Finance to schedule a Change Control Board for a budget adjustment.\n\nAnalytic Accounts:\n'+ projects
+
+    if msg:
+        raise Warning(msg)
+
+_check_budget(record)
+            </field>
+        </record>
+    
+    </data>
+</odoo>

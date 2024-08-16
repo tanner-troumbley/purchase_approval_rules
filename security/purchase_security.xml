@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="0">
+
+    <record id ='purchase_levels' model='ir.module.category'>
+        <field name='name'>Purchase Levels</field>
+        <field name='description'>The Different levels of purchasing power a user can have.</field>
+        <field name="sequence">10</field>
+        <field name='parent_id' ref='base.module_category_inventory'/>
+    </record>
+
+    <record id ='group_purchase_1' model = 'res.groups'>
+        <field name='name'>Purchase-1</field>
+        <field name='category_id' ref='purchase_levels'/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+       </record>
+
+    <record id ='group_purchase_2' model = 'res.groups'>
+        <field name='name'>Purchase-2</field>
+        <field name='category_id' ref='purchase_levels'/>
+        <field name="implied_ids" eval="[(4, ref('group_purchase_1'))]"/>
+    </record>
+
+    <record id ='group_purchase_3' model = 'res.groups'>
+        <field name='name'>Purchase-3</field>
+        <field name='category_id' ref='purchase_levels'/>
+        <field name="implied_ids" eval="[(4, ref('group_purchase_2'))]"/>
+    </record>
+
+     <record id ='group_purchase_4' model = 'res.groups'>
+        <field name='name'>Purchase-4</field>
+        <field name='category_id' ref='purchase_levels'/>
+        <field name="implied_ids" eval="[(4, ref('group_purchase_3'))]"/>
+    </record>
+
+    <record id ='group_purchase_5' model = 'res.groups'>
+        <field name='name'>Purchase-5</field>
+        <field name='category_id' ref='purchase_levels'/>
+        <field name="implied_ids" eval="[(4, ref('group_purchase_4'))]"/>
+    </record>
+
+</data>
+</odoo>
